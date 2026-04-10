@@ -1,4 +1,4 @@
-# Módulo inicial de procesamiento de ventas
+# Módulo inicia de procesamiento de ventas
 def p(d):
     # Esta función hace muchas cosas a la vez
     res = []
