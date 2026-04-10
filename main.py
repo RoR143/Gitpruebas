@@ -1,30 +1,46 @@
 # Módulo inicia de procesamiento de ventas
 def p(d):
-    # Esta función hace muchas cosas a la vez
-    res = []
+    resultado = []
     for i in d:
         # Comprobar si es una venta válida
         if i['tipo'] == 'venta' and i['monto'] > 0 and i['estado'] == 'completado':
             # Aplicar descuento si el monto es alto o es cliente VIP
-            if i['monto'] > 1000 or (i['cliente_tipo'] == 'VIP' and i['monto'] > 500):
-                f = i['monto'] * 0.9
-            else:
-                f = i['monto']
+            f = checkDescuento(i)
 
             # Formatear el resultado
-            s = "Cliente: " + i['nombre'] + " - Total: " + str(f)
-            res.append(s)
+            formatRdo(f, i, resultado)
 
-            # Imprimir log de auditoría (duplicado innecesario)
+            # Imprimir log de auditoría (duplicado eliminado)
             print("Procesando registro de: " + i['nombre'])
+            # Comprueba si el tipo de venta es una devolución o no
         elif i['tipo'] == 'devolucion' and i['monto'] > 0:
             # Lógica de devoluciones mezclada
-            f = i['monto'] * -1
-            s = "Cliente: " + i['nombre'] + " - Retorno: " + str(f)
-            res.append(s)
-            print("Procesando registro de: " + i['nombre'])
+            devolucion(i, resultado)
 
-    return res
+    return resultado
+# Función para procesar la devolución
+def devolucion(i, res):
+    """
+Procesa la devolución
+    :param i: cada venta registrada
+    :param res: resultado de la devolución
+    """
+    f = i['monto'] * -1
+    s = "Cliente: " + i['nombre'] + " - Retorno: " + str(f)
+    res.append(s)
+
+# Función para retornar resultado
+def formatRdo(f, i, res):
+    s = "Cliente: " + i['nombre'] + " - Total: " + str(f)
+    res.append(s)
+
+# Función para emitir descuento si el cliente es VIP
+def checkDescuento(i):
+    if i['monto'] > 1000 or (i['cliente_tipo'] == 'VIP' and i['monto'] > 500):
+        f = i['monto'] * 0.9
+    else:
+        f = i['monto']
+    return f
 
 
 # Datos de prueba para verificar que funciona
